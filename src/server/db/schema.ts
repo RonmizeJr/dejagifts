@@ -12,16 +12,12 @@ import { index, pgTableCreator } from "drizzle-orm/pg-core";
  */
 export const createTable = pgTableCreator((name) => `dejagifts_${name}`);
 
-export const posts = createTable(
-	"post",
-	(d) => ({
-		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-		name: d.varchar({ length: 256 }),
-		createdAt: d
-			.timestamp({ withTimezone: true })
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
-	}),
-	(t) => [index("name_idx").on(t.name)],
-);
+export const products = createTable("products", (t) => ({
+	id: t.serial('id').primaryKey(),
+	name: t.text('name').notNull(),
+	description: t.text('description'),
+	price: t.numeric('price').notNull(),
+	imageUrl: t.text('image_url').notNull(),
+	createdAt: t.timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+	updatedAt: t.timestamp('updated_at').default(sql`CURRENT_TIMESTAMP`),
+}))
